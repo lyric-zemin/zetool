@@ -10,13 +10,14 @@ interface DebounceFn {
 export default function (fn: Function, time: number): DebounceFn {
   let timer: number | undefined
   const scheduledTask = function (...args: unknown[]) {
-    if (timer) clearTimeout(timer)
+    cancel()
     timer = setTimeout(function () {
       fn(...args)
     }, time)
   }
-  scheduledTask.cancel = () => {
+  const cancel = () => {
     if (timer) clearTimeout(timer)
   }
+  scheduledTask.cancel = cancel
   return scheduledTask
 }
