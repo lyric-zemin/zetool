@@ -1,3 +1,4 @@
+// @ts-nocheck
 const now = performance.now || Date.now,
   root = typeof window === 'undefined' ? global : window,
   vendors = ['moz', 'webkit'],

@@ -1,4 +1,4 @@
-import Emitter from './emitter'
+import Emitter from '../emitter'
 
 const emitter = new Emitter()
 
