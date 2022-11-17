@@ -1,8 +1,9 @@
-name: Node.js CI
+name: Tests
 
 on:
   push:
-    - main
+    branches:
+      - main
 
 jobs:
   tests:
@@ -20,4 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm run test
+      - run: |
+          npm i
+          npm run test
