@@ -2,11 +2,12 @@
 const now = performance.now || Date.now,
   root = typeof window === 'undefined' ? global : window,
   vendors = ['moz', 'webkit'],
-  suffix = 'AnimationFrame',
-  raf = root['request' + suffix],
+  suffix = 'AnimationFrame'
+
+let raf = root['request' + suffix],
   caf = root['cancel' + suffix] || root['cancelRequest' + suffix]
 
-for (var i = 0; !raf && i < vendors.length; i++) {
+for (let i = 0; !raf && i < vendors.length; i++) {
   raf = root[vendors[i] + 'Request' + suffix]
   caf =
     root[vendors[i] + 'Cancel' + suffix] ||
@@ -15,18 +16,18 @@ for (var i = 0; !raf && i < vendors.length; i++) {
 
 // Some versions of FF have rAF but not cAF
 if (!raf || !caf) {
-  var last = 0,
-    id = 0,
-    queue = [],
+  let last = 0,
+    id = 0
+  const queue = [],
     frameDuration = 1000 / 60
 
   raf = function (callback) {
     if (queue.length === 0) {
-      var _now = now(),
+      const _now = now(),
         next = Math.max(0, frameDuration - (_now - last))
       last = next + _now
       setTimeout(function () {
-        var cp = queue.slice(0)
+        const cp = queue.slice(0)
         // Clear queue here to prevent
         // callbacks from appending listeners
         // to the current frame's queue
@@ -61,21 +62,18 @@ if (!raf || !caf) {
   }
 }
 
-export default function (fn) {
+export default function (fn: Function): number {
   // Wrap in a new function to prevent
   // `cancel` potentially being assigned
   // to the native rAF function
   return raf.call(root, fn)
 }
 
-export const cancel = function () {
-  caf.apply(root, arguments)
+export const cancel = function (id: number) {
+  caf.apply(root, id)
 }
 
-export const polyfill = function (object) {
-  if (!object) {
-    object = root
-  }
+export const polyfill = function (object: Object = root) {
   object.requestAnimationFrame = raf
   object.cancelAnimationFrame = caf
 }
